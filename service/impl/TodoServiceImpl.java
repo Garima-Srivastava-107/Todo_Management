@@ -2,6 +2,7 @@ package com.example.todo_management.service.impl;
 
 import com.example.todo_management.dto.TodoDto;
 import com.example.todo_management.entity.Todo;
+import com.example.todo_management.exceptions.ResourceNotFoundException;
 import com.example.todo_management.repository.TodoRepository;
 import com.example.todo_management.service.TodoService;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,8 @@ public class TodoServiceImpl implements TodoService {
     }
     @Override
     public TodoDto getTodo(Long id){
-        Todo todo=todoRepository.getById(id);
+//        if todo method doesn't exists in class
+        Todo todo=todoRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Todo not found with id : "+id));;
         //logic to convert jpa entity dto
         TodoDto todoDto2=modelMapper.map(todo,TodoDto.class);
         return todoDto2;
@@ -43,6 +45,18 @@ public class TodoServiceImpl implements TodoService {
         List<Todo> todo=todoRepository.findAll();
         //logic to convert jpa entity dto
         return todo.stream().map((todos)-> modelMapper.map(todos,TodoDto.class)).collect(Collectors.toList());
+    }
+    @Override
+    public TodoDto updateTodo(TodoDto todoDto,Long id){
+//        First--> Retrieve existing todo message
+        Todo todo=todoRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Todo not found with id : "+id));
+        todo.setTitle((todoDto.getTitle()));
+        todo.setDescription(todoDto.getDescription());
+        todo.setCompleted(todoDto.getCompleted());
+        //save method perform both insert and update operation if primary key is there then update
+         Todo todo1=todoRepository.save(todo);
+        TodoDto todoDto2=modelMapper.map(todo1,TodoDto.class);
+        return todoDto2;
     }
 
 

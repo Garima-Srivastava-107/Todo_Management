@@ -36,4 +36,10 @@ public class TodoController {
         //another way of writing the same thing
         return ResponseEntity.ok(reqTodo);
     }
+    //Build update todo REST API
+    @PutMapping("/{id}")
+    public ResponseEntity<TodoDto> updateTodo(@RequestBody TodoDto todoDto,@PathVariable Long id){
+        TodoDto todo=todoService.updateTodo(todoDto,id);
+        return ResponseEntity.ok(todo);
+    }
 }
