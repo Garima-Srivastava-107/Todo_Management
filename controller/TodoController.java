@@ -48,4 +48,10 @@ public class TodoController {
       TodoDto deletedTodo=todoService.deleteTodo(id);
         return ResponseEntity.ok(deletedTodo);
     }
+    //Build Complete Todo REST API
+    @PutMapping("/comp/{id}")
+    public ResponseEntity<TodoDto> completeTodo(@RequestBody TodoDto todoDto,@PathVariable Long id){
+        TodoDto compTodo=todoService.completeTodo(todoDto,id);
+        return ResponseEntity.ok(compTodo);
+    }
 }
