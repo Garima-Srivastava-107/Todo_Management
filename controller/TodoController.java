@@ -49,13 +49,16 @@ public class TodoController {
         return ResponseEntity.ok(deletedTodo);
     }
     //Build Complete Todo REST API
-    @PutMapping("/comp/{id}")
+    @PatchMapping("/comp/{id}")
     public ResponseEntity<TodoDto> completeTodo(@PathVariable Long id){
         TodoDto compTodo=todoService.completeTodo(id);
         return ResponseEntity.ok(compTodo);
     }
     //Build inComplete Todo REST API
-    @PutMapping("/incomplete/{id}")
+//    all the complete method and incomplete method has the patch mapping
+// IMPORTANT :-->   PUT is a technique of altering resources when the client transmits data that revamps the whole resource.
+// PATCH is a technique for transforming the resources when the client transmits partial data that will be updated without changing the whole data.
+    @PatchMapping("/incomplete/{id}")
     public ResponseEntity<TodoDto> incompleteTodo(@PathVariable Long id){
         TodoDto compTodo=todoService.incompleteTodo(id);
         return ResponseEntity.ok(compTodo);

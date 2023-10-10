@@ -31,6 +31,11 @@ public class SpringSecurityConfig {
             authorize.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
             authorize.requestMatchers(HttpMethod.PUT,"/api/**").hasRole("ADMIN");
             authorize.requestMatchers(HttpMethod.DELETE,"/api/**").hasRole("ADMIN");
+//            To provide more than one role to the users use the method named as has any role method
+            authorize.requestMatchers(HttpMethod.GET,"/api**").hasAnyRole("ADMIN","niraj");
+            authorize.requestMatchers(HttpMethod.PATCH,"/api/**").hasAnyRole("ADMIN","niraj");
+//            Providing public access to get api for that we have permitAll method for these we don't have to provide the user credentials
+            authorize.requestMatchers(HttpMethod.GET,"/api/**").permitAll();
             authorize.anyRequest().authenticated();
         }).httpBasic(Customizer.withDefaults());
                 return http.build();
