@@ -2,6 +2,7 @@ package com.example.todo_management.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -22,9 +23,16 @@ public class SpringSecurityConfig {
 //    to authorize all the incoming http request
 //    we use authorizeHttpRequest t authorize all the http request
 //    **********Here we have configured the spring security in such a way that we have only enabled the http basic authentication*****************/
+//    Role based authorization
+//    all the incoming post request that starts with url /api/ will be accessible to the one having admin role
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
-        http.csrf((csrf)->csrf.disable()).authorizeHttpRequests((authorize) ->authorize.anyRequest().authenticated()).httpBasic(Customizer.withDefaults());
+        http.csrf((csrf)->csrf.disable()).authorizeHttpRequests((authorize) -> {
+            authorize.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
+            authorize.requestMatchers(HttpMethod.PUT,"/api/**").hasRole("ADMIN");
+            authorize.requestMatchers(HttpMethod.DELETE,"/api/**").hasRole("ADMIN");
+            authorize.anyRequest().authenticated();
+        }).httpBasic(Customizer.withDefaults());
                 return http.build();
     }
     //Here lets create a spring bean within that we create a multiple users and store them in a in-memory object
